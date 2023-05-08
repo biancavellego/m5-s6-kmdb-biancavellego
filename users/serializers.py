@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
-from .models import User
+from users.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -25,7 +25,7 @@ class UserSerializer(serializers.ModelSerializer):
             "updated_at",
         ]
 
-    read_only_fields = "updated_at"
+    read_only_fields = ["id", "updated_at"]
 
     extra_kwargs = {
         "password": {"write_only": True},

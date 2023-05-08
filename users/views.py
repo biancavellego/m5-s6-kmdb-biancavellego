@@ -3,8 +3,8 @@
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework import generics
 
-from .models import User
-from .serializers import UserSerializer
+from users.models import User
+from users.serializers import UserSerializer
 from users.permissions import IsAdminOrCreate
 
 

@@ -10,3 +10,13 @@ class IsAdminOrCreate(permissions.BasePermission):
             and request.user.is_superuser
             or request.method == "POST"
         )
+
+
+class IsAdminOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view: View) -> bool:
+        return (
+            request.method in permissions.SAFE_METHODS or
+            request.user.is_authenticated
+            and request.user.is_superuser
+        )
+
