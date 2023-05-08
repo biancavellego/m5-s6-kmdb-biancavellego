@@ -3,7 +3,6 @@ from rest_framework import serializers
 from movies.models import Movie
 from genres.models import Genre
 from genres.serializers import GenreSerializer
-import ipdb
 
 class MovieSerializer(serializers.ModelSerializer):
     genres = GenreSerializer(many=True, allow_null=True)
