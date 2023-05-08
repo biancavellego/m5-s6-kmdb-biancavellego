@@ -14,4 +14,4 @@ class ReviewView(generics.ListCreateAPIView):
     lookup_url_kwarg = "movie_id"    
 
     def perform_create(self, serializer: ReviewSerializer) -> None:
-        serializer.save(user=self.request.user)
+        serializer.save(critic=self.request.user, movie_id=self.kwargs["movie_id"])

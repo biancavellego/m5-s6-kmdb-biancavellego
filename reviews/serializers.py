@@ -1,20 +1,28 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
-from reviews.models import Review
-from reviews.serializers import ReviewSerializer
+from reviews.models import Review, validate_stars
+from users.models import User
+from movies.models import Movie
+
+class CriticSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "first_name",
+            "last_name",
+        ]
 
 class ReviewSerializer(serializers.ModelSerializer):
-    critic = serializers.SerializerMethodField()
+    critic = CriticSerializer(read_only=True)
+    stars = serializers.IntegerField(validators=[validate_stars], allow_null=True)
+
 
     def create(self, validated_data: dict) -> Review:
-        return Review.objects.create(**validated_data)
+        movie_id = get_object_or_404(Movie, pk=validated_data["movie_id"])
 
-    def get_critic(self, obj):
-        return {
-            "id": obj.user.id,
-            "first_name": obj.user.first_name,
-            "last_name": obj.user.last_name,
-        }
+        return Review.objects.create(**validated_data)
 
     class Meta:
         model = Review
@@ -23,7 +31,7 @@ class ReviewSerializer(serializers.ModelSerializer):
             "stars",
             "review",
             "spoilers",
-            "movie_id ",
+            "movie_id",
             "critic",
         ]
         depth = 1
@@ -32,4 +40,5 @@ class ReviewSerializer(serializers.ModelSerializer):
 
         extra_kwargs = {
             "spoilers": {"allow_null": True},
+            "stars": {"allow_null": True},
         }
